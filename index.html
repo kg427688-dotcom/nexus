@@ -437,14 +437,257 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 
 /* SCROLLBAR */
 ::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-@media(max-width:580px){
-  .quiz-opts-grid{grid-template-columns:1fr}
-  .tr-stats-row{grid-template-columns:1fr 1fr}
+
+/* ══════════════════════════════════
+   BOTTOM NAV (mobile only)
+══════════════════════════════════ */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:60px;background:var(--ink2);border-top:1px solid var(--border2);z-index:300;justify-content:space-around;align-items:center;padding:0 .5rem;backdrop-filter:blur(20px)}
+.bn-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:.5rem .75rem;border-radius:10px;cursor:pointer;transition:all .2s;color:var(--muted);flex:1;position:relative}
+.bn-item.active{color:var(--c1)}
+.bn-item.active .bn-icon{filter:drop-shadow(0 0 5px var(--c1))}
+.bn-icon{font-size:1.35rem;line-height:1}
+.bn-label{font-family:'JetBrains Mono',monospace;font-size:.52rem;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.bn-dot{position:absolute;top:5px;right:12px;width:7px;height:7px;border-radius:50%;background:var(--c2);display:none}
+.bn-dot.on{display:block}
+
+/* ══════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+══════════════════════════════════ */
+
+/* Tablet — 768px */
+@media(max-width:768px){
+  /* Layout */
+  #app{flex-direction:column}
+  .sidebar{display:none!important}
+  .main-area{padding-bottom:60px} /* space for bottom nav */
+  .bottom-nav{display:flex}
+
+  /* Lobby body padding */
+  #pg-lobby .body,
+  #pg-room .body,
+  #pg-quiz-setup .body{ padding:1rem; }
+
+  /* Games grid 1 col */
+  .games-grid{grid-template-columns:1fr;gap:.875rem}
+  .lb-grid{grid-template-columns:repeat(2,1fr);gap:.75rem}
+
+  /* Topbar */
+  .topbar{padding:.6rem 1rem}
+  .topbar-title{font-size:.8rem}
+
+  /* Room */
+  .rcode{font-size:1.8rem;letter-spacing:.2em}
+  .room-code-area{flex-direction:column;align-items:flex-start;gap:.75rem}
+
+  /* Chat — stack rooms panel on top */
+  .chat-layout{flex-direction:column}
+  .chat-rooms{width:100%;height:auto;border-right:none;border-bottom:1px solid var(--border);flex-shrink:0}
+  .chat-rooms-hd{padding:.65rem 1rem}
+  .chat-room-list{display:flex;flex-direction:row;overflow-x:auto;gap:.4rem;padding:.5rem}
+  .chat-room-item{white-space:nowrap;border-radius:999px;padding:.4rem .875rem;background:var(--ink3);border:1px solid var(--border)}
+  .chat-room-item.active{background:rgba(0,229,255,.12);border-color:rgba(0,229,255,.3)}
+  .chat-hd{padding:.65rem 1rem}
+  .chat-msgs{padding:.875rem}
+  .chat-input-row{padding:.65rem .875rem}
+  .msg{max-width:88%}
+
+  /* Friends — stack layout */
+  .friends-layout{grid-template-columns:1fr;overflow:visible}
+  .friends-sidebar{border-right:none;border-bottom:1px solid var(--border);max-height:200px;overflow-y:auto}
+  .friend-list{display:flex;flex-direction:row;overflow-x:auto;gap:.5rem;padding:.5rem}
+  .friend-item{flex-direction:column;align-items:center;text-align:center;min-width:72px;padding:.5rem .35rem;gap:.35rem;border-radius:10px;background:var(--ink3);border:1px solid var(--border)}
+  .f-info{min-width:0;width:100%}
+  .f-name{font-size:.72rem}
+  .f-status{font-size:.62rem}
+  .profile-panel{padding:1rem}
+  .profile-hero{gap:1rem}
+  .profile-av-lg{width:60px;height:60px;font-size:1.5rem}
+  .profile-name{font-size:1.1rem}
+  .stats-grid{grid-template-columns:repeat(3,1fr);gap:.5rem}
+  .stat-box{padding:.75rem .5rem}
+  .stat-val{font-size:1.3rem}
+
+  /* Quiz */
+  .quiz-q-card{padding:1.25rem}
+  .quiz-q-text{font-size:1.1rem}
+  .quiz-opts-grid{grid-template-columns:1fr 1fr;gap:.6rem}
+  .qopt{padding:.875rem .75rem;font-size:.9rem;border-radius:12px}
+  .quiz-body{padding:1rem;gap:.875rem}
+  .quiz-clock{font-size:2.2rem}
+
+  /* Reflex */
+  .reflex-body{padding:1rem;gap:1rem}
+  .reflex-zone{width:min(320px,92vw);height:190px}
+  .reflex-mini-stats{gap:1rem}
+  .r-pcard{min-width:90px;padding:.65rem .875rem}
+  .r-pscore{font-size:1.2rem}
+
+  /* Word Bomb */
+  .wb-body{padding:1rem;gap:1rem}
+  .wb-bomb{font-size:4rem}
+  .wb-syllable{font-size:2.8rem}
+  .wb-pcard{min-width:78px;padding:.5rem .75rem}
+  .wb-inp{font-size:1.1rem;padding:.75rem 1rem}
+
+  /* Memory Lock */
+  .pat-body{padding:1rem;gap:1rem}
+
+  /* Type Race */
+  .tr-body{padding:1rem;gap:.875rem}
+  .tr-stats-row{grid-template-columns:repeat(2,1fr);gap:.6rem}
+  .tr-stat-v{font-size:1.2rem}
+  .tr-bar-name{min-width:75px;font-size:.72rem}
+  .tr-text-box{padding:1rem;font-size:.9rem;line-height:1.8}
+  .tr-round-badge{font-size:.65rem}
+
+  /* Results */
+  #pg-results{padding:1.25rem;gap:1.25rem}
+  .res-hero{font-size:1.8rem}
+  .podium{gap:.5rem}
+  .pod{min-width:85px;padding:.75rem .5rem}
+  .pod-1{height:145px}
+  .pod-2{height:110px}
+  .pod-3{height:85px}
+  .pod-emoji{font-size:1.4rem}
+  .pod-name{font-size:.75rem}
+  .pod-score{font-size:.8rem}
+  .full-list{max-width:100%}
+
+  /* Quiz setup */
   .q-opts-g{grid-template-columns:1fr}
-  .podium{gap:.4rem}.pod{min-width:80px}
-  .sidebar{display:none}
+
+  /* Landing */
+  #pg-landing{padding:1.5rem;gap:1.5rem}
+  .land-title{font-size:3.5rem}
+  .land-glow{width:80px;height:80px;font-size:2.4rem}
+}
+
+/* Phone — 480px */
+@media(max-width:480px){
+  /* Landing */
+  .land-title{font-size:2.8rem;letter-spacing:.03em}
+  .land-sub{font-size:.62rem;letter-spacing:.25em}
+  .land-form{gap:.6rem}
+
+  /* Lobby */
+  .gc-desc{font-size:.8rem}
+  .gc-name{font-size:.85rem}
+  .lb-grid{grid-template-columns:1fr}
+  .lb-card{padding:.875rem}
+
+  /* Topbar */
+  .topbar{padding:.55rem .875rem}
+  .topbar-title{font-size:.75rem;letter-spacing:.04em}
+  .user-pill span{display:none}
+  .user-pill{padding:.3rem .5rem}
+
+  /* Room */
+  .rcode{font-size:1.6rem;letter-spacing:.15em}
+  .p-row{padding:.55rem .75rem;gap:.65rem}
+  .p-av{width:32px;height:32px}
+
+  /* Chat */
+  .chat-inp{font-size:.85rem;padding:.6rem .875rem}
+  .msg-bubble{font-size:.83rem;padding:.5rem .75rem}
+
+  /* Quiz */
+  .quiz-opts-grid{grid-template-columns:1fr 1fr;gap:.5rem}
+  .qopt{padding:.75rem .6rem;font-size:.83rem;border-radius:10px;gap:.5rem}
+  .qopt-sym{width:1.6rem;height:1.6rem;font-size:.85rem;border-radius:5px;flex-shrink:0}
+  .quiz-clock{font-size:1.9rem}
+  .quiz-q-text{font-size:1rem}
+  .quiz-qnum{font-size:.68rem}
+  .quiz-lb{padding:.75rem}
+  .qlb-row{font-size:.8rem}
+
+  /* Reflex */
+  .reflex-zone{width:min(300px,94vw);height:170px}
+  .r-pcard{min-width:78px;padding:.5rem .75rem}
+  .r-pscore{font-size:1.1rem}
+  .r-ms{font-size:2.8rem}
+  .rmstat-v{font-size:1.1rem}
+  .reflex-sboard{gap:.5rem}
+
+  /* Word Bomb */
+  .wb-syllable{font-size:2.4rem}
+  .wb-bomb{font-size:3.5rem}
+  .wb-pcard{min-width:70px;padding:.45rem .6rem}
+  .wb-pname{font-size:.7rem;max-width:70px}
+  .wb-hearts{font-size:.75rem}
+  .wb-inp{font-size:1rem;padding:.65rem .875rem}
+
+  /* Memory Lock */
+  .pat-body{padding:.875rem;gap:.875rem}
+  .psc{min-width:78px;padding:.55rem .75rem}
+  .psc-val{font-size:1.2rem}
+  .pat-status{font-size:.72rem;letter-spacing:.08em}
+  .pat-speed-badge{font-size:.6rem}
+
+  /* Type Race */
+  .tr-text-box{font-size:.85rem;padding:.875rem;line-height:1.75}
+  .tr-inp{font-size:.85rem;padding:.7rem .875rem}
+  .tr-bar-name{min-width:60px;font-size:.68rem}
+  .tr-stats-row{grid-template-columns:repeat(2,1fr);gap:.5rem}
+  .tr-stat{padding:.6rem}
+  .tr-stat-v{font-size:1.1rem}
+  .tr-stat-l{font-size:.55rem}
+  .tr-round-badge{font-size:.6rem;padding:.2rem .5rem}
+  .tr-rt-title{font-size:1.2rem}
+
+  /* Results */
+  .res-hero{font-size:1.5rem}
+  .podium{gap:.35rem}
+  .pod{min-width:75px;padding:.6rem .4rem}
+  .pod-1{height:130px}
+  .pod-2{height:98px}
+  .pod-3{height:75px}
+  .pod-emoji{font-size:1.2rem}
+  .pod-name{font-size:.7rem}
+  .pod-score{font-size:.72rem}
+  .fl-row{font-size:.8rem;padding:.38rem 0}
+  .res-btns{flex-direction:column;align-items:stretch}
+  .res-btns .btn{width:100%}
+
+  /* Friends profile */
+  .profile-hero{flex-direction:column;gap:.875rem}
+  .profile-av-lg{width:56px;height:56px;font-size:1.4rem}
+  .profile-name{font-size:1rem}
+  .stats-grid{grid-template-columns:repeat(3,1fr);gap:.4rem}
+  .stat-box{padding:.6rem .4rem}
+  .stat-val{font-size:1.1rem}
+  .stat-lbl{font-size:.55rem}
+  .gstat-row{padding:.65rem .875rem;gap:.75rem}
+  .gstat-icon{font-size:1.2rem}
+  .gstat-name{font-size:.82rem}
+  .gstat-score{font-size:.88rem}
+
+  /* Bottom nav labels */
+  .bn-label{display:none}
+  .bn-icon{font-size:1.5rem}
+  .bn-item{padding:.6rem}
+}
+
+/* Very small — 360px */
+@media(max-width:360px){
+  .land-title{font-size:2.3rem}
+  .quiz-opts-grid{grid-template-columns:1fr}
+  .qopt{padding:.75rem}
+  .wb-players-row{gap:.4rem}
+  .wb-pcard{min-width:62px;padding:.4rem .5rem}
+  .reflex-zone{height:155px}
+  .tr-stats-row{grid-template-columns:1fr 1fr}
+}
+
+/* Touch-friendly tap targets */
+@media(hover:none){
+  .qopt,.game-card,.sb-item,.bn-item,.friend-item,.chat-room-item{-webkit-tap-highlight-color:transparent}
+  .btn{min-height:44px}
+  .pcell{min-width:44px;min-height:44px}
+  .r-target{width:80px;height:80px;font-size:1.8rem}
+  .wb-inp,.tr-inp,.chat-inp,.inp,.name-input{font-size:16px!important} /* prevent iOS zoom */
 }
 </style>
 </head>
@@ -469,11 +712,25 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <div class="sb-toggle" id="sb-toggle" onclick="toggleSidebar()" title="Expand sidebar">⟩</div>
 </div>
 
+<!-- BOTTOM NAV (mobile only) -->
+<div class="bottom-nav" id="bottom-nav">
+  <div class="bn-item active" id="bn-lobby" onclick="navTo('lobby')">
+    <span class="bn-icon">🏠</span><span class="bn-label">Lobby</span>
+  </div>
+  <div class="bn-item" id="bn-chat" onclick="navTo('chat')">
+    <span class="bn-icon">💬</span><span class="bn-label">Chat</span>
+    <div class="bn-dot on" id="bn-chat-dot"></div>
+  </div>
+  <div class="bn-item" id="bn-friends" onclick="navTo('friends')">
+    <span class="bn-icon">👥</span><span class="bn-label">Friends</span>
+  </div>
+</div>
+
 <!-- MAIN AREA -->
 <div class="main-area" id="main-area">
 
 <!-- ── LANDING ── -->
-<div id="pg-landing" class="page on">
+<div id="pg-landing" class="page on" style="display:flex">
   <div class="land-glow">⚡</div>
   <h1 class="land-title">NEXUS</h1>
   <p class="land-sub">Real-Time Multiplayer Arena</p>
@@ -912,17 +1169,26 @@ function toggleSidebar() {
 
 function navTo(pg) {
   document.querySelectorAll('.sb-item').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.bn-item').forEach(e=>e.classList.remove('active'));
   const sbEl = document.getElementById('sb-'+pg);
   if(sbEl) sbEl.classList.add('active');
-  if(pg==='lobby') showPage('pg-lobby');
-  else if(pg==='chat') { showPage('pg-chat'); document.getElementById('chat-notif').classList.remove('on'); initChat(); }
-  else if(pg==='friends') showPage('pg-friends');
+  const bnEl = document.getElementById('bn-'+pg);
+  if(bnEl) bnEl.classList.add('active');
+  if(pg==='lobby') { showPage('pg-lobby'); showBottomNav(); }
+  else if(pg==='chat') { showPage('pg-chat'); document.getElementById('chat-notif').classList.remove('on'); document.getElementById('bn-chat-dot').classList.remove('on'); initChat(); showBottomNav(); }
+  else if(pg==='friends') { showPage('pg-friends'); showBottomNav(); }
 }
+
+function showBottomNav() { const el=document.getElementById('bottom-nav'); if(el) el.style.display='flex'; }
+function hideBottomNav() { const el=document.getElementById('bottom-nav'); if(el) el.style.display='none'; }
 
 function showPage(id) {
   document.querySelectorAll('.page,.game-screen,.result-screen').forEach(p=>p.classList.remove('on'));
   const el = document.getElementById(id);
   if(el) el.classList.add('on');
+  // Hide bottom nav on game screens and results, show on pages
+  const isGameOrResult = el && (el.classList.contains('game-screen') || el.classList.contains('result-screen') || id==='pg-quiz-setup' || id==='pg-room');
+  if(isGameOrResult) hideBottomNav(); else if(S.name) showBottomNav();
 }
 
 /* ── ENTER / LOBBY ── */
@@ -936,6 +1202,7 @@ function enterLobby() {
   renderLB();
   showPage('pg-lobby');
   document.getElementById('sidebar').style.display='flex';
+  showBottomNav();
   navTo('lobby');
   toast('Welcome, '+v+'! 🎮','ok');
 }
@@ -958,9 +1225,9 @@ function initPlayerData() {
   renderFriendsList();
 }
 
-function goLobby() { resetGames(); showPage('pg-lobby'); }
-function playAgain() { showPage('pg-room'); renderRoom(); }
-function leaveRoom() { resetGames(); showPage('pg-lobby'); }
+function goLobby() { resetGames(); showPage('pg-lobby'); showBottomNav(); renderLB(); }
+function playAgain() { showPage('pg-room'); renderRoom(); hideBottomNav(); }
+function leaveRoom() { resetGames(); showPage('pg-lobby'); showBottomNav(); }
 
 /* ── TOAST ── */
 function toast(msg, type='info', dur=2800) {
@@ -1452,14 +1719,17 @@ function startPattern(){
 }
 function buildPATGrid(){
   const g=document.getElementById('pat-grid');
-  const cellSz=Math.min(75, Math.floor((Math.min(window.innerWidth-80,480))/(PAT.size+.3)));
-  g.style.cssText=`grid-template-columns:repeat(${PAT.size},1fr);gap:${Math.max(4,8-PAT.size)}px`;
+  const availW = Math.min(window.innerWidth - 40, 440);
+  const gap = Math.max(4, 8-PAT.size);
+  const cellSz = Math.floor((availW - gap*(PAT.size-1)) / PAT.size);
+  const clampedSz = Math.max(48, Math.min(88, cellSz));
+  g.style.cssText=`grid-template-columns:repeat(${PAT.size},1fr);gap:${gap}px`;
   g.innerHTML='';
   for(let i=0;i<PAT.size*PAT.size;i++){
     const cell=document.createElement('div');
     cell.className='pcell showing';
     cell.id='pc-'+i;
-    cell.style.cssText=`--cell-color:${PAT_CELL_COLORS[i%PAT_CELL_COLORS.length]};width:${cellSz}px;height:${cellSz}px;font-size:${Math.max(1,cellSz*.3)}px`;
+    cell.style.cssText=`--cell-color:${PAT_CELL_COLORS[i%PAT_CELL_COLORS.length]};width:${clampedSz}px;height:${clampedSz}px;font-size:${Math.max(.85,clampedSz*.28)}rem`;
     cell.textContent=PAT_EMOJIS[i%PAT_EMOJIS.length];
     cell.onclick=()=>patClick(i);
     g.appendChild(cell);
@@ -1858,8 +2128,9 @@ document.addEventListener('keydown',e=>{
 document.addEventListener('input',e=>{ if(e.target.id==='join-code-inp')e.target.value=e.target.value.toUpperCase(); });
 document.getElementById('chat-inp').addEventListener('keydown',e=>{if(e.key==='Enter')sendChat();});
 
-// Hide sidebar until logged in
+// Hide sidebar + bottom nav until logged in
 document.getElementById('sidebar').style.display='none';
+document.getElementById('bottom-nav').style.display='none';
 console.log('%c⚡ NEXUS v3 ready','color:#00e5ff;font-family:monospace;font-weight:bold');
 </script>
 </body>

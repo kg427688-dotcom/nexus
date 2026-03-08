@@ -736,7 +736,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <p class="land-sub">Real-Time Multiplayer Arena</p>
   <div class="land-form">
     <label class="inp-label">Your Name</label>
-    <input id="name-inp" class="inp" placeholder="e.g. Krish, ProGamer..." maxlength="18" autocomplete="off"/>
+    <input id="name-inp" class="inp" placeholder="e.g. Krish, ProGamer..." maxlength="18" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" readonly onfocus="this.removeAttribute('readonly')"/>
     <button class="btn btn-cyan btn-full" onclick="enterLobby()">⚡ Enter Arena</button>
   </div>
   <div class="land-features">
@@ -1195,6 +1195,10 @@ function showPage(id) {
 function enterLobby() {
   const v = document.getElementById('name-inp').value.trim();
   if(!v){ toast('Enter your name!','err'); return; }
+  // Immediately hide landing + blur input to dismiss any autocomplete dropdown
+  const inp = document.getElementById('name-inp');
+  inp.blur();
+  document.getElementById('pg-landing').style.display = 'none';
   S.name = v;
   document.getElementById('nav-uname').textContent = v;
   document.getElementById('nav-av').textContent = v[0].toUpperCase();
